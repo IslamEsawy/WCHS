@@ -1,4 +1,4 @@
-package com.wchs;
+package com.wchs.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
