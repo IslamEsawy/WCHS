@@ -25,6 +25,11 @@
 	<jaxrs:server id="restContainer" address="/">
 		<jaxrs:serviceBeans>
 			<ref bean="miscellaneousWebService" />
+			<ref bean="borrowWebService" />
+			<ref bean="customerWebService" />
+			<ref bean="productWebService" />
+			<ref bean="incomeWebService" />
+			<ref bean="transactionWebService" />
 		</jaxrs:serviceBeans>
 	</jaxrs:server>
 </beans>

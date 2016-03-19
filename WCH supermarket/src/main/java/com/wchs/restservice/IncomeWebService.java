@@ -2,8 +2,8 @@ package com.wchs.restservice;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.wchs.model.Miscellaneous;
-import com.wchs.service.MiscellaneousService;
+import com.wchs.model.Income;
+import com.wchs.service.IncomeService;
 import com.wchs.util.BackEndResponse;
 import com.wchs.util.MessageCode;
 import com.wchs.util.ResultStatus;
@@ -16,21 +16,20 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 /**
- * Created by Islam on 3/18/2016.
+ * Created by Islam on 3/19/2016.
  */
-@Path("/miscellaneous")
-@Service("miscellaneousWebService")
-public class MiscellaneousWebService {
-
+@Path("/income")
+@Service("incomeWebService")
+public class IncomeWebService {
     @Autowired
-    MiscellaneousService miscellaneousService;
+    IncomeService incomeService;
 
     @GET
     @Path("/list")
     public String list() {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            return gson.toJson(miscellaneousService.list());
+            return gson.toJson(incomeService.list());
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);
@@ -41,12 +40,12 @@ public class MiscellaneousWebService {
 
     @POST
     @Path("/save")
-    public String save(@RequestBody String miscellaneousJson) {
+    public String save(@RequestBody String incomeJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            Miscellaneous miscellaneous = gsonRequest.fromJson(miscellaneousJson, Miscellaneous.class);
-            return gsonResponse.toJson(miscellaneousService.save(miscellaneous));
+            Income income = gsonRequest.fromJson(incomeJson, Income.class);
+            return gsonResponse.toJson(incomeService.save(income));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);
@@ -57,12 +56,12 @@ public class MiscellaneousWebService {
 
     @POST
     @Path("/update")
-    public String update(@RequestBody String miscellaneousJson) {
+    public String update(@RequestBody String incomeJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            Miscellaneous miscellaneous = gsonRequest.fromJson(miscellaneousJson, Miscellaneous.class);
-            return gsonResponse.toJson(miscellaneousService.update(miscellaneous));
+            Income income = gsonRequest.fromJson(incomeJson, Income.class);
+            return gsonResponse.toJson(incomeService.update(income));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);
@@ -73,12 +72,12 @@ public class MiscellaneousWebService {
 
     @POST
     @Path("/delete")
-    public String delete(@RequestBody String miscellaneousJson) {
+    public String delete(@RequestBody String incomeJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            Miscellaneous miscellaneous = gsonRequest.fromJson(miscellaneousJson, Miscellaneous.class);
-            return gsonResponse.toJson(miscellaneousService.delete(miscellaneous));
+            Income income = gsonRequest.fromJson(incomeJson, Income.class);
+            return gsonResponse.toJson(incomeService.delete(income));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);

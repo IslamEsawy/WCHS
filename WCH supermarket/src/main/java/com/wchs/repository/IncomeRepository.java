@@ -1,31 +1,33 @@
 package com.wchs.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.wchs.model.Miscellaneous;
+import com.wchs.model.Income;
 import com.wchs.util.ResultStatus;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+/**
+ * Created by Islam on 3/19/2016.
+ */
+
 @Repository
-public class MiscellaneousRepository {
+public class IncomeRepository {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    public List<Miscellaneous> list() {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Miscellaneous.class);
+    public List<Income> list() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Income.class);
         return criteria.list();
     }
 
-    public ResultStatus save(Miscellaneous miscellaneous) {
+    public ResultStatus save(Income income) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(miscellaneous);
+        session.save(income);
 
         try {
             session.flush();
@@ -35,9 +37,9 @@ public class MiscellaneousRepository {
         return ResultStatus.SUCCESS;
     }
 
-    public ResultStatus delete(Miscellaneous miscellaneous) {
+    public ResultStatus delete(Income income) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(miscellaneous);
+        session.delete(income);
 
         try {
             session.flush();
@@ -47,9 +49,9 @@ public class MiscellaneousRepository {
         return ResultStatus.SUCCESS;
     }
 
-    public ResultStatus update(Miscellaneous miscellaneous) {
+    public ResultStatus update(Income income) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(miscellaneous);
+        session.update(income);
 
         try {
             session.flush();

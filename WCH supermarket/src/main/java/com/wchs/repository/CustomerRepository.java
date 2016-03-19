@@ -1,31 +1,32 @@
 package com.wchs.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.wchs.model.Miscellaneous;
+import com.wchs.model.Customer;
 import com.wchs.util.ResultStatus;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class MiscellaneousRepository {
+import java.util.List;
 
+/**
+ * Created by Islam on 3/19/2016.
+ */
+
+@Repository
+public class CustomerRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public List<Miscellaneous> list() {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Miscellaneous.class);
+    public List<Customer> list() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Customer.class);
         return criteria.list();
     }
 
-    public ResultStatus save(Miscellaneous miscellaneous) {
+    public ResultStatus save(Customer customer) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(miscellaneous);
+        session.save(customer);
 
         try {
             session.flush();
@@ -35,9 +36,9 @@ public class MiscellaneousRepository {
         return ResultStatus.SUCCESS;
     }
 
-    public ResultStatus delete(Miscellaneous miscellaneous) {
+    public ResultStatus delete(Customer customer) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(miscellaneous);
+        session.delete(customer);
 
         try {
             session.flush();
@@ -47,9 +48,9 @@ public class MiscellaneousRepository {
         return ResultStatus.SUCCESS;
     }
 
-    public ResultStatus update(Miscellaneous miscellaneous) {
+    public ResultStatus update(Customer customer) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(miscellaneous);
+        session.update(customer);
 
         try {
             session.flush();
