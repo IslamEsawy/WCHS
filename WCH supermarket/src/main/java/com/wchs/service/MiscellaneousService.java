@@ -42,12 +42,15 @@ public class MiscellaneousService {
         return backEndResponse;
     }
 
-    public BackEndResponse delete(Miscellaneous miscellaneous) {
+    public BackEndResponse delete(String[] id) {
         BackEndResponse backEndResponse = new BackEndResponse();
-        ResultStatus resultStatus = miscellaneousRepository.delete(miscellaneous);
+        ResultStatus resultStatus = ResultStatus.SUCCESS;
+        for (String id1 : id){
+            System.out.println(id1);
+            resultStatus = miscellaneousRepository.delete(id1);
+        }
         if (ResultStatus.SUCCESS.equals(resultStatus)) {
             backEndResponse.setMessageCode(MessageCode.SUCCESS);
-            backEndResponse.setObject(miscellaneous);
         } else
             backEndResponse.setMessageCode(MessageCode.ERROR);
         backEndResponse.setResultStatus(resultStatus);
@@ -64,5 +67,9 @@ public class MiscellaneousService {
             backEndResponse.setMessageCode(MessageCode.ERROR);
         backEndResponse.setResultStatus(resultStatus);
         return backEndResponse;
+    }
+
+    public Double getSumofMisc() {
+        return miscellaneousRepository.getSum();
     }
 }

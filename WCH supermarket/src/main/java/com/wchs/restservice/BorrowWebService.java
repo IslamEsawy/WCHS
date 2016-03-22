@@ -2,6 +2,7 @@ package com.wchs.restservice;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.wchs.model.Borrow;
 import com.wchs.service.BorrowService;
 import com.wchs.service.CustomerService;
@@ -79,6 +80,23 @@ public class BorrowWebService {
         try {
             Borrow borrow = gsonRequest.fromJson(borrowJson, Borrow.class);
             return gsonResponse.toJson(borrowService.delete(borrow));
+        } catch (Exception e) {
+            BackEndResponse backEndResponse = new BackEndResponse();
+            backEndResponse.setResultStatus(ResultStatus.FAILED);
+            backEndResponse.setMessageCode(MessageCode.ERROR);
+            return gsonResponse.toJson(backEndResponse);
+        }
+    }
+
+    @POST
+    @Path("/makePaid")
+    public String makePaid(@RequestBody String borrowJson) {
+        Gson gsonRequest = new Gson();
+        Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        try {
+            String[] id = gsonRequest.fromJson(borrowJson, new TypeToken<String[]>() {}.getType());
+            System.out.println(id);
+            return gsonResponse.toJson(borrowService.makePaid(id));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);

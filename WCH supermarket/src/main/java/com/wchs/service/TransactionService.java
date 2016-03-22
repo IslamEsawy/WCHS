@@ -1,5 +1,6 @@
 package com.wchs.service;
 
+import com.wchs.model.Customer;
 import com.wchs.model.Transaction;
 import com.wchs.repository.TransactionRepository;
 import com.wchs.util.BackEndResponse;
@@ -26,7 +27,13 @@ public class TransactionService {
         return backEndResponse;
     }
 
-
+    public BackEndResponse list(Integer id) {
+        BackEndResponse backEndResponse = new BackEndResponse();
+        backEndResponse.setObject(transactionRepository.list(id));
+        backEndResponse.setResultStatus(ResultStatus.SUCCESS);
+        backEndResponse.setMessageCode(MessageCode.SUCCESS);
+        return backEndResponse;
+    }
     public BackEndResponse save(Transaction transaction) {
         BackEndResponse backEndResponse = new BackEndResponse();
         ResultStatus resultStatus = transactionRepository.save(transaction);

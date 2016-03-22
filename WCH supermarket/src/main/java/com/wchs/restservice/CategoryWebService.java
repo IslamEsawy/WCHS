@@ -3,8 +3,8 @@ package com.wchs.restservice;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.wchs.model.Miscellaneous;
-import com.wchs.service.MiscellaneousService;
+import com.wchs.model.Category;
+import com.wchs.service.CategoryService;
 import com.wchs.util.BackEndResponse;
 import com.wchs.util.MessageCode;
 import com.wchs.util.ResultStatus;
@@ -15,23 +15,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import java.util.List;
 
 /**
  * Created by Islam on 3/18/2016.
  */
-@Path("/miscellaneous")
-@Service("miscellaneousWebService")
-public class MiscellaneousWebService {
+@Path("/category")
+@Service("categoryWebService")
+public class CategoryWebService {
 
     @Autowired
-    MiscellaneousService miscellaneousService;
+    CategoryService categoryService;
 
     @GET
     @Path("/list")
     public String list() {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            return gson.toJson(miscellaneousService.list());
+            return gson.toJson(categoryService.list());
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);
@@ -42,12 +43,12 @@ public class MiscellaneousWebService {
 
     @POST
     @Path("/save")
-    public String save(@RequestBody String miscellaneousJson) {
+    public String save(@RequestBody String categoryJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            Miscellaneous miscellaneous = gsonRequest.fromJson(miscellaneousJson, Miscellaneous.class);
-            return gsonResponse.toJson(miscellaneousService.save(miscellaneous));
+            Category category = gsonRequest.fromJson(categoryJson, Category.class);
+            return gsonResponse.toJson(categoryService.save(category));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);
@@ -58,12 +59,12 @@ public class MiscellaneousWebService {
 
     @POST
     @Path("/update")
-    public String update(@RequestBody String miscellaneousJson) {
+    public String update(@RequestBody String categoryJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            Miscellaneous miscellaneous = gsonRequest.fromJson(miscellaneousJson, Miscellaneous.class);
-            return gsonResponse.toJson(miscellaneousService.update(miscellaneous));
+            Category category = gsonRequest.fromJson(categoryJson, Category.class);
+            return gsonResponse.toJson(categoryService.update(category));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);
@@ -72,13 +73,15 @@ public class MiscellaneousWebService {
         }
     }
 
+    @POST
+    @Path("/delete")
     public String delete(@RequestBody String stringArrayJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            String[] id = gsonRequest.fromJson(stringArrayJson, new TypeToken<String[]>() {}.getType());
-            System.out.println(id);
-            return gsonResponse.toJson(miscellaneousService.delete(id));
+            List<Category> categories = gsonRequest.fromJson(stringArrayJson, new TypeToken<List<Category>>() {}.getType());
+            System.out.println(categories.size());
+            return gsonResponse.toJson(categoryService.delete(categories));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);

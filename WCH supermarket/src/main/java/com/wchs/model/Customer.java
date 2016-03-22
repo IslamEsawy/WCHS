@@ -23,7 +23,7 @@ public class Customer {
     @Expose
     private Integer cid;
 
-    @Column(name = "name")
+    @Column(name = "name",unique = true)
     @Expose
     private String name;
 
@@ -86,17 +86,10 @@ public class Customer {
         return borrows;
     }
 
-    public void setBorrows(Collection<Borrow> borrows) {
-        this.borrows = borrows;
-    }
-
     public Collection<Transaction> getcProducts() {
         return cProducts;
     }
 
-    public void setcProducts(Collection<Transaction> cProducts) {
-        this.cProducts = cProducts;
-    }
 
 
 }

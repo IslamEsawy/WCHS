@@ -27,9 +27,9 @@ public class TransactionRepository {
         return criteria.list();
     }
 
-    public List<Transaction> list(Customer customer) {
+    public List<Transaction> list(Integer id) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Transaction.class);
-        criteria.add(Restrictions.eq("cid", customer.getCid()));
+        criteria.add(Restrictions.eq("cpid.customer.cid", id));
         return criteria.list();
     }
 

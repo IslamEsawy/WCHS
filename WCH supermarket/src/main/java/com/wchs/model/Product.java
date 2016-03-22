@@ -6,14 +6,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table (name="Product")
@@ -23,7 +16,7 @@ public class Product {
 	@Expose
 	private Integer pid;
 
-	@Column
+	@Column(unique = true)
 	@Expose
 	private String name;
 
@@ -33,19 +26,17 @@ public class Product {
 
 	@Column
 	@Expose
-	private Integer isSnack;
+	private Integer numberofBoxes;
 
 	@Column
 	@Expose
-	private Integer numberofBoxes;
+	private Integer isSnack;
 
 	@Column
 	@Expose
 	private Double boxPrice;
 
-	@Column
-	@Expose
-	private Double totalBoxesPrice;
+
 
 	@Column
 	@Expose
@@ -79,24 +70,28 @@ public class Product {
 	@Expose
 	private Double netProfit;
 
-	@OneToMany(mappedBy="cpid.product", cascade=CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn (name="category_id")
 	@Expose
+	private Category category;
+
+
+	@OneToMany(mappedBy="cpid.product", cascade=CascadeType.ALL, orphanRemoval = true)
 	private Collection<Transaction> cProducts = new ArrayList<Transaction>();
+
 
 	public Product(){}
 
 	public Product(String name, Date date, Integer isSnack, Integer numberofBoxes,
-			Double boxPrice, Double totalBoxesPrice, Integer itemsPerBox,
-			Integer totalItems, Integer totalAvailableItems, Double buyingPricePerItem,
-			Double sellingPricePerItem, Double totalBuyingPrice,
-			Double totalSellingPrice, Double netProfit,
-			Collection<Transaction> cProducts) {
+				   Double boxPrice, Integer itemsPerBox,
+				   Integer totalItems, Integer totalAvailableItems, Double buyingPricePerItem,
+				   Double sellingPricePerItem, Double totalBuyingPrice,
+				   Double totalSellingPrice, Double netProfit, Category category) {
 		this.name = name;
 		this.date = date;
 		this.isSnack = isSnack;
 		this.numberofBoxes = numberofBoxes;
 		this.boxPrice = boxPrice;
-		this.totalBoxesPrice = totalBoxesPrice;
 		this.itemsPerBox = itemsPerBox;
 		this.totalItems = totalItems;
 		this.totalAvailableItems = totalAvailableItems;
@@ -105,9 +100,8 @@ public class Product {
 		this.totalBuyingPrice = totalBuyingPrice;
 		this.totalSellingPrice = totalSellingPrice;
 		this.netProfit = netProfit;
-		this.cProducts = cProducts;
+		this.category = category;
 	}
-
 	public Integer getTotalAvailableItems() {
 		return totalAvailableItems;
 	}
@@ -149,14 +143,6 @@ public class Product {
 		this.name = name;
 	}
 
-	public Integer getNumberofBoxes() {
-		return numberofBoxes;
-	}
-
-	public void setNumberofBoxes(Integer numberofBoxes) {
-		this.numberofBoxes = numberofBoxes;
-	}
-
 	public Double getBoxPrice() {
 		return boxPrice;
 	}
@@ -165,13 +151,6 @@ public class Product {
 		this.boxPrice = boxPrice;
 	}
 
-	public Double getTotalBoxesPrice() {
-		return totalBoxesPrice;
-	}
-
-	public void setTotalBoxesPrice(Double totalBoxesPrice) {
-		this.totalBoxesPrice = totalBoxesPrice;
-	}
 
 	public Integer getItemsPerBox() {
 		return itemsPerBox;
@@ -233,9 +212,19 @@ public class Product {
 		return cProducts;
 	}
 
-	public void setcProducts(Collection<Transaction> cProducts) {
-		this.cProducts = cProducts;
+	public Integer getNumberofBoxes() {
+		return numberofBoxes;
 	}
-	
-	
+
+	public void setNumberofBoxes(Integer numberofBoxes) {
+		this.numberofBoxes = numberofBoxes;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 }

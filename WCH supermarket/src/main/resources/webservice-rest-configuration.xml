@@ -29,6 +29,8 @@
 			<ref bean="customerWebService" />
 			<ref bean="productWebService" />
 			<ref bean="incomeWebService" />
+			<ref bean="categoryWebService" />
+			<ref bean="inventoryWebService" />
 			<ref bean="transactionWebService" />
 		</jaxrs:serviceBeans>
 	</jaxrs:server>

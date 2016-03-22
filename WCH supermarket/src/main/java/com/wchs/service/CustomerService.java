@@ -21,6 +21,7 @@ public class CustomerService {
     public BackEndResponse list() {
         BackEndResponse backEndResponse = new BackEndResponse();
         backEndResponse.setObject(customerRepository.list());
+        System.out.println(backEndResponse.getObject());
         backEndResponse.setResultStatus(ResultStatus.SUCCESS);
         backEndResponse.setMessageCode(MessageCode.SUCCESS);
         return backEndResponse;

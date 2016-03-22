@@ -1,10 +1,15 @@
 package com.wchs.repository;
 
+import com.wchs.model.Category;
 import com.wchs.model.Product;
 import com.wchs.util.ResultStatus;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,8 +29,15 @@ public class ProductRepository {
         return criteria.list();
     }
 
+    public List<Product> list(Category category) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Product.class);
+        criteria.add(Restrictions.eq("category.id", category.getId()));
+        return criteria.list();
+    }
+
     public ResultStatus save(Product product) {
         Session session = sessionFactory.getCurrentSession();
+        System.out.println(product.getName());
         session.save(product);
 
         try {
@@ -36,9 +48,13 @@ public class ProductRepository {
         return ResultStatus.SUCCESS;
     }
 
-    public ResultStatus delete(Product product) {
+    public ResultStatus delete(String id) {
+        Integer idI = Integer.parseInt(id);
+        System.out.println(idI);
         Session session = sessionFactory.getCurrentSession();
-        session.delete(product);
+        Product myObject = (Product) session.load(Product.class, idI);
+        myObject.setCategory(new Category());
+        session.delete(myObject);
 
         try {
             session.flush();
@@ -58,5 +74,17 @@ public class ProductRepository {
             return ResultStatus.FAILED;
         }
         return ResultStatus.SUCCESS;
+    }
+
+    public Double getRestOfGoodsCapital() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Product.class);
+        criteria.setProjection(Projections.sqlProjection("sum(buyingPricePerItem * totalAvailableItems) as sum", new String[]{"sum"}, new Type[]{StandardBasicTypes.DOUBLE}));
+        return (Double) criteria.uniqueResult();
+    }
+
+    public Double getRestOfGoodsProfit() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Product.class);
+        criteria.setProjection(Projections.sqlProjection("sum((sellingPricePerItem-buyingPricePerItem) * totalAvailableItems) as sum", new String[]{"sum"}, new Type[]{StandardBasicTypes.DOUBLE}));
+        return (Double) criteria.uniqueResult();
     }
 }

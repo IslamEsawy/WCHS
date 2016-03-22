@@ -28,6 +28,7 @@ public class ProductService {
 
 
     public BackEndResponse save(Product product) {
+        System.out.println(product.getName());
         BackEndResponse backEndResponse = new BackEndResponse();
         ResultStatus resultStatus = productRepository.save(product);
         if (ResultStatus.SUCCESS.equals(resultStatus)) {
@@ -39,12 +40,15 @@ public class ProductService {
         return backEndResponse;
     }
 
-    public BackEndResponse delete(Product product) {
+    public BackEndResponse delete(String[] id) {
         BackEndResponse backEndResponse = new BackEndResponse();
-        ResultStatus resultStatus = productRepository.delete(product);
+        ResultStatus resultStatus = ResultStatus.SUCCESS;
+        for (String id1 : id){
+            System.out.println(id1);
+            resultStatus = productRepository.delete(id1);
+        }
         if (ResultStatus.SUCCESS.equals(resultStatus)) {
             backEndResponse.setMessageCode(MessageCode.SUCCESS);
-            backEndResponse.setObject(product);
         } else
             backEndResponse.setMessageCode(MessageCode.ERROR);
         backEndResponse.setResultStatus(resultStatus);
@@ -61,5 +65,13 @@ public class ProductService {
             backEndResponse.setMessageCode(MessageCode.ERROR);
         backEndResponse.setResultStatus(resultStatus);
         return backEndResponse;
+    }
+
+    public Double getRestOfGoodsCapital() {
+        return productRepository.getRestOfGoodsCapital();
+    }
+
+    public Double getRestOfGoodsProfit() {
+        return productRepository.getRestOfGoodsProfit();
     }
 }

@@ -2,6 +2,7 @@ package com.wchs.restservice;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.wchs.model.Product;
 import com.wchs.service.ProductService;
 import com.wchs.util.BackEndResponse;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import java.util.List;
 
 /**
  * Created by Islam on 3/19/2016.
@@ -43,10 +45,12 @@ public class ProductWebService {
     public String save(@RequestBody String productJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        System.out.println("product save");
         try {
             Product product = gsonRequest.fromJson(productJson, Product.class);
             return gsonResponse.toJson(productService.save(product));
         } catch (Exception e) {
+            e.printStackTrace();
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);
             backEndResponse.setMessageCode(MessageCode.ERROR);
@@ -72,12 +76,13 @@ public class ProductWebService {
 
     @POST
     @Path("/delete")
-    public String delete(@RequestBody String productJson) {
+    public String delete(@RequestBody String stringArrayJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            Product product = gsonRequest.fromJson(productJson, Product.class);
-            return gsonResponse.toJson(productService.delete(product));
+            String[] id = gsonRequest.fromJson(stringArrayJson, new TypeToken<String[]>() {}.getType());
+            System.out.println(id);
+            return gsonResponse.toJson(productService.delete(id));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);

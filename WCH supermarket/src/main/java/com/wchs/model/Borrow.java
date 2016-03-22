@@ -23,7 +23,7 @@ public class Borrow {
 
 	@Column
 	@Expose
-	private double amount;
+	private Double amount;
 
 	@Column
 	@Expose
@@ -33,6 +33,10 @@ public class Borrow {
 	@Expose
 	private Date date;
 
+	@Column
+	@Expose
+	private String isPaid;
+
 	@ManyToOne
 	@JoinColumn (name="customer_cid")
 	@Expose
@@ -41,11 +45,12 @@ public class Borrow {
 	public Borrow(){
 
 	}
-	public Borrow(double amount, String signature, Date date, Customer customer) {
+	public Borrow(Double amount, String signature, Date date, String isPaid, Customer customer) {
 		this.amount = amount;
 		this.signature = signature;
 		this.date = date;
 		this.customer = customer;
+		this.isPaid = isPaid;
 	}
 
 	public Integer getBid() {
@@ -56,11 +61,11 @@ public class Borrow {
 		this.bid = bid;
 	}
 
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -87,8 +92,13 @@ public class Borrow {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-	
-	
-	
-	
+
+
+	public String getIsPaid() {
+		return isPaid;
+	}
+
+	public void setIsPaid(String isPaid) {
+		this.isPaid = isPaid;
+	}
 }
