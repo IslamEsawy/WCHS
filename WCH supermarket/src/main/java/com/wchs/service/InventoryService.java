@@ -79,10 +79,10 @@ public class InventoryService {
                 totalMisc = 0.0;
             if (totalBorrow == null)
                 totalBorrow = 0.0;
-            Double totalCategoriesCapital = categoryService.getSumOfCapital();
-            Double totalCategoriesProfit = categoryService.getSumOfProfit();
-            Double restOfGoodsCapital = productService.getRestOfGoodsCapital();
-            Double restOfGoodsProfit = productService.getRestOfGoodsProfit();
+            Double totalCategoriesCapital = limitPrecision(categoryService.getSumOfCapital(),3);
+            Double totalCategoriesProfit = limitPrecision(categoryService.getSumOfProfit(),3);
+            Double restOfGoodsCapital = limitPrecision(productService.getRestOfGoodsCapital(),3);
+            Double restOfGoodsProfit = limitPrecision(productService.getRestOfGoodsProfit(),3);
             System.out.println(restOfGoodsCapital);
             System.out.println(restOfGoodsProfit);
             Inventory inventory = new Inventory(month, restOfGoodsCapital, restOfGoodsProfit, totalBorrow, totalMisc,totalCategoriesCapital,totalCategoriesProfit);
@@ -95,7 +95,12 @@ public class InventoryService {
         }
         return backEndResponse;
     }
-
+	public Double limitPrecision(Double dblAsString, int maxDigitsAfterDecimal) {
+	    int multiplier = (int) Math.pow(10, maxDigitsAfterDecimal);
+	    Double truncated = (double) ((long) (dblAsString * multiplier)) / multiplier;
+	    System.out.println(dblAsString + " ==> " + truncated);
+	    return truncated;
+	}
     public BackEndResponse save(Inventory inventory) {
         BackEndResponse backEndResponse = new BackEndResponse();
         ResultStatus resultStatus = inventoryRepository.save(inventory);

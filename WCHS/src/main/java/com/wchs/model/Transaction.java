@@ -1,44 +1,17 @@
 package com.wchs.model;
 
-import com.google.gson.annotations.Expose;
-
 import java.util.Date;
 
-import javax.persistence.*;
-
-@Entity
-@Table (name="transaction")
-@AssociationOverrides({
-    @AssociationOverride(name = "cpid.customer",
-        joinColumns = @JoinColumn(name = "cid")),
-    @AssociationOverride(name = "cpid.product",
-        joinColumns = @JoinColumn(name = "pid")) })
 public class Transaction {
-	
-
-	@EmbeddedId
-	@Expose
 	private TransactionId cpid = new TransactionId();
-
-	@Column
-	@Expose
 	private Integer quantity;
-
-	@Column
-	@Expose
 	private Date date;
-
-	@Column
-	@Expose
 	private Double cash;
-
-	@Column
-	@Expose
 	private Double moneyToReturn;
 
 	public Transaction(){}
 	public Transaction(TransactionId cpid, Integer quantity, Date date,
-			Double cash, Double moneyToReturn) {
+					   Double cash, Double moneyToReturn) {
 		this.cpid = cpid;
 		this.quantity = quantity;
 		this.date = date;

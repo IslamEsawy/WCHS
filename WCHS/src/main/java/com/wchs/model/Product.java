@@ -1,88 +1,25 @@
 package com.wchs.model;
 
-import com.google.gson.annotations.Expose;
-
 import java.util.Date;
-import java.util.ArrayList;
-import java.util.Collection;
 
-import javax.persistence.*;
-
-@Entity
-@Table (name="Product")
 public class Product {
-	@Id
-	@GeneratedValue (strategy=GenerationType.AUTO)
-	@Expose
 	private Integer pid;
-
-	
-	@Column(unique = true)
-	@Expose
 	private String barcode;
-	
-	@Column(unique = true)
-	@Expose
 	private String name;
-
-	@Column
-	@Expose
 	private Date date;
-
-	@Column
-	@Expose
 	private Integer numberofBoxes;
-
-	@Column
-	@Expose
 	private Integer isSnack;
-
-	@Column
-	@Expose
 	private Double boxPrice;
-
-
-
-	@Column
-	@Expose
 	private Integer itemsPerBox;
-
-	@Column
-	@Expose
 	private Integer totalItems;
-
-	@Column
-	@Expose
 	private Integer totalAvailableItems;
-
-	@Column
-	@Expose
 	private Double buyingPricePerItem;
-
-	@Column
-	@Expose
 	private Double sellingPricePerItem;
-
-	@Column
-	@Expose
 	private Double totalBuyingPrice;
-
-	@Column
-	@Expose
 	private Double totalSellingPrice;
-
-	@Column
-	@Expose
 	private Double netProfit;
-
-	@ManyToOne
-	@JoinColumn (name="category_id")
-	@Expose
 	private Category category;
 
-
-	@OneToMany(mappedBy="cpid.product", cascade=CascadeType.ALL)
-	private Collection<Transaction> cProducts = new ArrayList<Transaction>();
 
 
 	public Product(){}
@@ -140,14 +77,7 @@ public class Product {
 	public void setIsSnack(Integer isSnack) {
 		this.isSnack = isSnack;
 	}
-	
-	public String getBarcode() {
-		return barcode;
-	}
 
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
 	public String getName() {
 		return name;
 	}
@@ -237,12 +167,16 @@ public class Product {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+	
+    public void subtractItems(Integer items){
+    	this.totalAvailableItems -= items;
+    }
 
-	public Collection<Transaction> getcProducts() {
-		return cProducts;
+	public String getBarcode() {
+		return barcode;
 	}
 
-	public void setcProducts(Collection<Transaction> cProducts) {
-		this.cProducts = cProducts;
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
 	}
 }

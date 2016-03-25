@@ -72,6 +72,8 @@ public class MiscellaneousWebService {
         }
     }
 
+    @POST
+    @Path("/delete")
     public String delete(@RequestBody String stringArrayJson) {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();

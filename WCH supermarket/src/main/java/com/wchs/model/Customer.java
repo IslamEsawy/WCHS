@@ -86,10 +86,12 @@ public class Customer {
         return borrows;
     }
 
+
     public Collection<Transaction> getcProducts() {
         return cProducts;
     }
 
-
-
+    public void setcProducts(Collection<Transaction> cProducts) {
+        this.cProducts = cProducts;
+    }
 }

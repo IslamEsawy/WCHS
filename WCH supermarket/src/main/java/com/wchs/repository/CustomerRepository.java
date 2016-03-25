@@ -27,9 +27,8 @@ public class CustomerRepository {
 
     public ResultStatus save(Customer customer) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(customer);
-
         try {
+            session.save(customer);
             session.flush();
         } catch (Exception e) {
             return ResultStatus.FAILED;

@@ -1,23 +1,10 @@
 package com.wchs.model;
 
-import com.google.gson.annotations.Expose;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @SuppressWarnings("serial")
-@Embeddable
 public class TransactionId implements java.io.Serializable{
-
-
-	@ManyToOne (cascade = CascadeType.ALL)
-	@Expose
 	private Customer customer;
-
-	@ManyToOne (cascade = CascadeType.ALL)
-	@Expose
 	private Product product;
 	
 	public TransactionId(){}

@@ -2,6 +2,7 @@ package com.wchs.restservice;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.wchs.model.Customer;
 import com.wchs.model.Transaction;
 import com.wchs.service.TransactionService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.persistence.EmbeddedId;
 import javax.ws.rs.*;
+import java.util.List;
 
 /**
  * Created by Islam on 3/19/2016.
@@ -64,8 +66,9 @@ public class TransactionWebService {
         Gson gsonRequest = new Gson();
         Gson gsonResponse = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         try {
-            Transaction transaction = gsonRequest.fromJson(transactionJson, Transaction.class);
-            return gsonResponse.toJson(transactionService.save(transaction));
+            List<Transaction> transactions = gsonRequest.fromJson(transactionJson, new TypeToken<List<Transaction>>() {
+            }.getType());
+            return gsonResponse.toJson(transactionService.save(transactions));
         } catch (Exception e) {
             BackEndResponse backEndResponse = new BackEndResponse();
             backEndResponse.setResultStatus(ResultStatus.FAILED);

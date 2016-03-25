@@ -1,6 +1,7 @@
 package com.wchs.service;
 
 import com.wchs.model.Product;
+import com.wchs.model.Transaction;
 import com.wchs.repository.ProductRepository;
 import com.wchs.util.BackEndResponse;
 import com.wchs.util.MessageCode;
@@ -8,6 +9,8 @@ import com.wchs.util.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by Islam on 3/19/2016.
@@ -73,5 +76,15 @@ public class ProductService {
 
     public Double getRestOfGoodsProfit() {
         return productRepository.getRestOfGoodsProfit();
+    }
+
+
+    public ResultStatus update(List<Transaction> transactions) {
+        ResultStatus resultStatus = ResultStatus.SUCCESS;
+        for (Transaction t : transactions){
+            t.getCpid().getProduct().setcProducts(transactions);
+            resultStatus = update(t.getCpid().getProduct()).getResultStatus();
+        }
+        return resultStatus;
     }
 }

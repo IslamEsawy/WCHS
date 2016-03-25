@@ -33,11 +33,11 @@ public class TransactionRepository {
         return criteria.list();
     }
 
-    public ResultStatus save(Transaction transaction) {
+    public ResultStatus save(List<Transaction> transactions) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(transaction);
-
         try {
+            for (Transaction t : transactions)
+                session.save(t);
             session.flush();
         } catch (Exception e) {
             return ResultStatus.FAILED;

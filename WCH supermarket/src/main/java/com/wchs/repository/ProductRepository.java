@@ -48,13 +48,14 @@ public class ProductRepository {
         return ResultStatus.SUCCESS;
     }
 
-    public ResultStatus delete(String id) {
-        Integer idI = Integer.parseInt(id);
-        System.out.println(idI);
+    public ResultStatus delete(String barcode) {
+        System.out.println("Barcode: " + barcode);
         Session session = sessionFactory.getCurrentSession();
-        Product myObject = (Product) session.load(Product.class, idI);
-        myObject.setCategory(new Category());
-        session.delete(myObject);
+        Criteria criteria = session.createCriteria(Product.class);
+        Product product = (Product)criteria.add(Restrictions.eq("barcode", barcode))
+                .uniqueResult();
+        product.setCategory(new Category());
+        session.delete(product);
 
         try {
             session.flush();

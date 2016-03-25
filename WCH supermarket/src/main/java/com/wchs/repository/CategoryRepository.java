@@ -41,15 +41,10 @@ public class CategoryRepository {
 
     public ResultStatus delete(Category category) {
         Session session = sessionFactory.getCurrentSession();
-        System.out.println("here1");
-        System.out.println("here2: "+category.getId());
         Object persistentInstance = session.load(Category.class, category.getId());
-        System.out.println("here3");
         if (persistentInstance != null) {
-            System.out.println("here4");
             session.delete(persistentInstance);
         }
-        System.out.println("here5");
         try {
             session.flush();
         } catch (Exception e) {
