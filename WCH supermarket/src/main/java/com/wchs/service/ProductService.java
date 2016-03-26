@@ -82,7 +82,6 @@ public class ProductService {
     public ResultStatus update(List<Transaction> transactions) {
         ResultStatus resultStatus = ResultStatus.SUCCESS;
         for (Transaction t : transactions){
-            t.getCpid().getProduct().setcProducts(transactions);
             resultStatus = update(t.getCpid().getProduct()).getResultStatus();
         }
         return resultStatus;

@@ -36,10 +36,22 @@ public class TransactionRepository {
     public ResultStatus save(List<Transaction> transactions) {
         Session session = sessionFactory.getCurrentSession();
         try {
-            for (Transaction t : transactions)
-                session.save(t);
+            for (Transaction t : transactions) {
+                Criteria criteria = session.createCriteria(Transaction.class);
+                criteria.add(Restrictions.eq("cpid.customer.cid", t.getCpid().getCustomer().getCid()));
+                criteria.add(Restrictions.eq("cpid.product.pid", t.getCpid().getProduct().getPid()));
+
+                Transaction transaction = (Transaction) criteria.uniqueResult();
+                if (transaction != null) {
+                    transaction.setQuantity(transaction.getQuantity() + t.getQuantity());
+                    transaction.setCash(transaction.getCash() + t.getCash());
+                    transaction.setMoneyToReturn(transaction.getMoneyToReturn() + t.getMoneyToReturn());
+                } else
+                    session.save(t);
+            }
             session.flush();
         } catch (Exception e) {
+            e.printStackTrace();
             return ResultStatus.FAILED;
         }
         return ResultStatus.SUCCESS;

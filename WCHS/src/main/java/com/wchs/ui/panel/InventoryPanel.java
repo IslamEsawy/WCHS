@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.print.PrinterException;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -119,5 +120,14 @@ public class InventoryPanel extends JPanel {
 			alignTable();
 		} else
 			makeTable();
+	}
+
+	public void print() {
+		try {
+			table.print();
+		} catch (PrinterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

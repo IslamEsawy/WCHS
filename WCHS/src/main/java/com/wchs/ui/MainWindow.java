@@ -2,6 +2,7 @@ package com.wchs.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +36,12 @@ public class MainWindow {
 	private JMenuBar menuBar;
 	private JMenu mnNewMenu;
 	private JMenuItem inventoryMenuItem;
+	private JMenuItem menuItem;
+
 	/**
 	 * Launch the application.
+	 * 
+	 * @wbp.parser.entryPoint
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -53,6 +58,8 @@ public class MainWindow {
 
 	/**
 	 * Create the application.
+	 * 
+	 * @wbp.parser.entryPoint
 	 */
 	public MainWindow() {
 		logic = new Logic();
@@ -79,13 +86,16 @@ public class MainWindow {
 				dlgProgress.dispose();// close the modal dialog
 				initialize();
 			}
+
 		};
 		sw.execute(); // this will start the processing on a separate
-		dlgProgress.setVisible(true); // this will block user input as
+		dlgProgress.setVisible(true); // this will block user input as/
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * 
+	 * @wbp.parser.entryPoint
 	 */
 	private void initialize() {
 		frame = new JFrame();
@@ -97,15 +107,14 @@ public class MainWindow {
 		customersPanel = new CustomersPanel();
 		managementPanel = new ManagementPanel();
 		transactionPanel = new TransactionPanel();
-		
-		
+
 		observer.setCustomersPanel(customersPanel);
 		observer.setManagementPanel(managementPanel);
 		observer.setTransactionPanel(transactionPanel);
-		
+
 		JPanel divisions = new JPanel();
 		frame.getContentPane().add(divisions, BorderLayout.NORTH);
-		
+
 		JButton customerDivision = new JButton("العملاء");
 		customerDivision.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -113,7 +122,7 @@ public class MainWindow {
 			}
 		});
 		divisions.add(customerDivision);
-		
+
 		JButton managementDivision = new JButton("الإدارة");
 		managementDivision.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -121,7 +130,7 @@ public class MainWindow {
 			}
 		});
 		divisions.add(managementDivision);
-		
+
 		JButton transactionDivision = new JButton("عملية بيع");
 		transactionDivision.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -129,7 +138,7 @@ public class MainWindow {
 			}
 		});
 		divisions.add(transactionDivision);
-		
+
 		division = new JPanel();
 		frame.getContentPane().add(division, BorderLayout.CENTER);
 		cardLayout = new CardLayout();
@@ -137,13 +146,13 @@ public class MainWindow {
 		division.add(customersPanel, "Card1");
 		division.add(managementPanel, "Card2");
 		division.add(transactionPanel, "Card3");
-		
+
 		menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
-		
+
 		mnNewMenu = new JMenu("ملف");
 		menuBar.add(mnNewMenu);
-		
+
 		inventoryMenuItem = new JMenuItem("عمل جرد");
 		inventoryMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -151,6 +160,25 @@ public class MainWindow {
 			}
 		});
 		mnNewMenu.add(inventoryMenuItem);
+
+		menuItem = new JMenuItem("طباعة");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel card = null;
+
+				for (Component comp : division.getComponents()) {
+					if (comp.isVisible() == true) {
+						card = (JPanel) comp;
+						if (card instanceof CustomersPanel) {
+							customersPanel.print();
+						} else if (card instanceof ManagementPanel) {
+							managementPanel.print();
+						}
+					}
+				}
+			}
+		});
+		mnNewMenu.add(menuItem);
 	}
 
 }

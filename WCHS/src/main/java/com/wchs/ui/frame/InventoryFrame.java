@@ -6,16 +6,30 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -101,17 +115,36 @@ public class InventoryFrame extends JFrame {
 				.getRestOfGoodsCapital().toString());
 		restOfGoodsWithProfitTextField.setText(inventory.getRestOfGoodsProfit()
 				.toString());
-		restGoodsWithSumTextField.setText(String.valueOf((inventory
-				.getRestOfGoodsProfit() + inventory.getRestOfGoodsCapital())));
+		restGoodsWithSumTextField.setText(String.valueOf(limitPrecision(
+				(inventory.getRestOfGoodsProfit() + inventory
+						.getRestOfGoodsCapital()), 3)));
 
 		totalBorrowTextField.setText(MainWindow.logic.getTotalBorrows()
 				.toString());
 		totalMiscTextField.setText(MainWindow.logic.getTotalMisc().toString());
 	}
 
+	public Double limitPrecision(Double dblAsString, int maxDigitsAfterDecimal) {
+		int multiplier = (int) Math.pow(10, maxDigitsAfterDecimal);
+		Double truncated = (double) ((long) (dblAsString * multiplier))
+				/ multiplier;
+		System.out.println(dblAsString + " ==> " + truncated);
+		return truncated;
+	}
+
 	private void intializeUIComponents() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 560, 534);
+
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu menu = new JMenu("ملف");
+		menuBar.add(menu);
+
+		JMenuItem menuItem = new JMenuItem("طباعة");
+
+		menu.add(menuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -175,7 +208,8 @@ public class InventoryFrame extends JFrame {
 		infoPanel.add(profitSumLabel, gbc_profitSumLabel);
 
 		restOfGoodsWithOutProfitTextField = new JTextField();
-		restOfGoodsWithOutProfitTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+		restOfGoodsWithOutProfitTextField
+				.setHorizontalAlignment(SwingConstants.RIGHT);
 		restOfGoodsWithOutProfitTextField.setEditable(false);
 		GridBagConstraints gbc_restOfGoodsWithOutProfitTextField = new GridBagConstraints();
 		gbc_restOfGoodsWithOutProfitTextField.gridwidth = 3;
@@ -187,7 +221,8 @@ public class InventoryFrame extends JFrame {
 				gbc_restOfGoodsWithOutProfitTextField);
 		restOfGoodsWithOutProfitTextField.setColumns(10);
 		JLabel restGoodsWithOutProfitLabel = new JLabel("بضاعة متبقية");
-		restGoodsWithOutProfitLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		restGoodsWithOutProfitLabel
+				.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_restGoodsWithOutProfitLabel = new GridBagConstraints();
 		gbc_restGoodsWithOutProfitLabel.insets = new Insets(0, 0, 5, 0);
 		gbc_restGoodsWithOutProfitLabel.gridwidth = 4;
@@ -199,7 +234,8 @@ public class InventoryFrame extends JFrame {
 				gbc_restGoodsWithOutProfitLabel);
 
 		restOfGoodsWithProfitTextField = new JTextField();
-		restOfGoodsWithProfitTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+		restOfGoodsWithProfitTextField
+				.setHorizontalAlignment(SwingConstants.RIGHT);
 		restOfGoodsWithProfitTextField.setEditable(false);
 		GridBagConstraints gbc_restOfGoodsWithProfitTextField = new GridBagConstraints();
 		gbc_restOfGoodsWithProfitTextField.gridwidth = 3;
@@ -315,6 +351,16 @@ public class InventoryFrame extends JFrame {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		tablePanel.add(jScrollPane);
 		contentPane.add(tablePanel, BorderLayout.CENTER);
+
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					printComponentToFile(contentPane, true);
+				} catch (PrinterException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 	}
 
 	private void makeTable() {
@@ -364,4 +410,79 @@ public class InventoryFrame extends JFrame {
 		}
 	}
 
+	public void printComponentToFile(Component comp, boolean fill)
+			throws PrinterException {
+		Paper paper = new Paper();
+		paper.setSize(8.3 * 72, 11.7 * 72);
+		paper.setImageableArea(18, 18, 559, 783);
+
+		PageFormat pf = new PageFormat();
+		pf.setPaper(paper);
+		pf.setOrientation(PageFormat.LANDSCAPE);
+
+		BufferedImage img = new BufferedImage((int) Math.round(pf.getWidth()),
+				(int) Math.round(pf.getHeight()), BufferedImage.TYPE_INT_RGB);
+
+		Graphics2D g2d = img.createGraphics();
+		g2d.setColor(Color.WHITE);
+		g2d.fill(new Rectangle(0, 0, img.getWidth(), img.getHeight()));
+		ComponentPrinter cp = new ComponentPrinter(comp, fill);
+		try {
+			cp.print(g2d, pf, 0);
+		} finally {
+			g2d.dispose();
+		}
+
+		try {
+			ImageIO.write(img, "png", new File("Page-" + (fill ? "Filled" : "")
+					+ ".png"));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public static class ComponentPrinter implements Printable {
+
+		private Component comp;
+		private boolean fill;
+
+		public ComponentPrinter(Component comp, boolean fill) {
+			this.comp = comp;
+			this.fill = fill;
+		}
+
+		@Override
+		public int print(Graphics g, PageFormat format, int page_index)
+				throws PrinterException {
+
+			if (page_index > 0) {
+				return Printable.NO_SUCH_PAGE;
+			}
+
+			Graphics2D g2 = (Graphics2D) g;
+			g2.translate(format.getImageableX(), format.getImageableY());
+
+			double width = (int) Math.floor(format.getImageableWidth());
+			double height = (int) Math.floor(format.getImageableHeight());
+
+			if (!fill) {
+
+				width = Math.min(width, comp.getPreferredSize().width);
+				height = Math.min(height, comp.getPreferredSize().height);
+
+			}
+
+			/*
+			 * comp.setBounds(0, 0, (int) Math.floor(width), (int)
+			 * Math.floor(height)); if (comp.getParent() == null) {
+			 * comp.addNotify(); } comp.validate(); comp.doLayout();
+			 */
+			comp.printAll(g2);
+			// if (comp.getParent() != null) {
+			//comp.removeNotify();
+			// }
+
+			return Printable.PAGE_EXISTS;
+		}
+	}
 }

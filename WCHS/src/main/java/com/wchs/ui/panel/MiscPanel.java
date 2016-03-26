@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterException;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -251,5 +252,14 @@ public class MiscPanel extends JPanel {
 			alignTable();
 		} else
 			makeTable();
+	}
+
+	public void print() {
+		try {
+			table.print();
+		} catch (PrinterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

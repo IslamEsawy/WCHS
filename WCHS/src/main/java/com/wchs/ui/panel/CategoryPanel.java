@@ -124,4 +124,13 @@ public class CategoryPanel extends JPanel {
 			categoriesList.setListData(categories.toArray(new Category[0]));
 		}
 	}
+
+	public void print() {
+/*		try {
+			categoriesList.print();
+		} catch (PrinterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+	}
 }

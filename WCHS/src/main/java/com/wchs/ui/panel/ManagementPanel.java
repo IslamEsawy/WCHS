@@ -1,12 +1,14 @@
 package com.wchs.ui.panel;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Font;
 @SuppressWarnings("serial")
 public class ManagementPanel extends JPanel {
 
@@ -15,6 +17,7 @@ public class ManagementPanel extends JPanel {
 	private BorrowPanel borrowPanel;
 	private MiscPanel miscPanel;
 	private InventoryPanel inventoryPanel;
+	private JTabbedPane tabbedPane;
 	/**
 	 * Create the panel.
 	 */
@@ -31,7 +34,7 @@ public class ManagementPanel extends JPanel {
 		add(tablePanel, BorderLayout.CENTER);
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tablePanel.add(tabbedPane);
 		productsPanel = new ProductsPanel();
 		borrowPanel = new BorrowPanel();
@@ -75,6 +78,20 @@ public class ManagementPanel extends JPanel {
 	public void setInventoryPanel(InventoryPanel inventoryPanel) {
 		this.inventoryPanel = inventoryPanel;
 	}
-
+	public void print() {
+		Component comp = tabbedPane.getSelectedComponent();
+		if (comp instanceof CategoryPanel){
+			categoryPanel.print();
+		}else if (comp instanceof ProductsPanel){
+			productsPanel.print();
+		}else if (comp instanceof BorrowPanel){
+			borrowPanel.print();
+		}else if (comp instanceof MiscPanel){
+			miscPanel.print();
+		}else if (comp instanceof InventoryPanel){
+			inventoryPanel.print();
+		}
+		
+	}
 	
 }
